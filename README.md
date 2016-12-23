@@ -61,3 +61,43 @@ If a manager selects Add New Product, it should allow the manager to add a compl
 ![screenshot](manager_view2.png)
 
 ************************************************************
+
+
+Challenge #3: Executive View (Final Level)
+
+Create a new MySQL table called departments. Your table should include the following columns:
+* department_id
+
+* department_name
+
+* over_ head_costs (A dummy number you set for each department)
+
+* total_sales
+Modify your bamazonCustomer.js app so that when a customer purchases anything from the store, the program will calculate the total sales from each transaction.
+Add the revenue from each transaction to the total_sales column for the related department.
+Make sure your app still updates the inventory listed in the products column.
+
+Create another Node app called bamazonExecutive.js. Running this application will list a set of menu options:
+View Product Sales by Department
+Create New Department
+
+When an executive selects View Product Sales by Department, the app should display a summarized table in their terminal/bash window. Use the table below as a guide.
+department_id	department_name	over_head_costs	product_sales	total_profit
+01	Electronics	10000	20000	10000
+02	Clothing	60000	100000	40000
+
+The total_profit should be calculated on the fly using the difference between over_head_costs and product_sales. total_profit should not be stored in any database. You should use a custom alias.
+
+
+************************************************************
+
+![screenshot](executive_view1.png)
+
+************************************************************
+
+************************************************************
+
+![screenshot](executive_view2.png)
+
+************************************************************
+

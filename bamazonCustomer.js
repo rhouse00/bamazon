@@ -59,10 +59,13 @@ function buyItem(){
 };
 
 function products(qty, item){
-	connection.query("SELECT product_name, stock_quantity, price FROM products WHERE ?", {item_id: item}, function(error, results){
+	connection.query("SELECT product_name, stock_quantity, price, department_id FROM products WHERE ?", {item_id: item}, function(error, results){
+		// console.log(results);
 		var stock = results[0].stock_quantity;
 		var name = results[0].product_name;
-		var price = results[0].price
+		var price = results[0].price;
+		var department = results[0].department_id;
+		var sales = qty * price;
 		if(error){
 			console.log(error);
 		}
@@ -72,16 +75,22 @@ function products(qty, item){
 		} else {
 			var newQty = stock - qty;
 			console.log("You just bought:\n" + results[0].product_name + " x" + qty + "\nTotal: $" + (results[0].price * qty) );
-				connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: newQty}, {item_id: item}], function(error, results){
-					if(error){
-						console.log(error);
-					}
-				});
-				connection.query("SELECT product_name, stock_quantity, price FROM products WHERE ?", {item_id: item}, function(error, results){
-					if(error){
-						console.log(error);
-					}
-				});
+			connection.query("UPDATE products SET ? WHERE ?", [{stock_quantity: newQty}, {item_id: item}], function(error, updatedResults){
+				if(error){
+					console.log(error);
+				}
+			});
+			// connection.query("SELECT product_name, stock_quantity, price FROM products WHERE ?", {item_id: item}, function(error, results){
+			// 	if(error){
+			// 		console.log(error);
+			// 	}
+			// });
+			connection.query(`UPDATE departments INNER JOIN products ON products.department_id = departments.department_id SET total_sales = total_sales + ${sales} WHERE departments.department_id = ${department} `, function(error, results){
+				if(error){
+					console.log(error);
+				}
+				console.log("it worked!");
+			});
 		}
 	});
 };

@@ -97,13 +97,15 @@ function addInventory(){
 
 var array = [];
 function addProduct(){
-	connection.query("SELECT department FROM products", function(error, results){
+	connection.query("SELECT department_id FROM departments", function(error, results){
 		if(error){
 			console.log(error);
 		}
 		for(var i = 0; i < results.length; i++){
-			array.push(results[i].department);
+			var num = results[i].department_id.toString();
+			array.push(num);
 		}
+		console.log(array);
 	});
 
 	inquirer.prompt([
@@ -115,12 +117,24 @@ function addProduct(){
 		{
 			type: "input",
 			message: "What is the price you will be selling this product for?",
-			name: "price"
+			name: "price",
+			validate: function(value){
+						if(isNaN(value) == false){
+							return true
+						}
+						return false
+					}
 		},
 		{
 			type: "input",
 			message: "What is the initial quantity you want on hand?",
-			name: "qty"
+			name: "qty",
+			validate: function(value){
+						if(isNaN(value) == false){
+							return true
+						}
+						return false
+					}
 		},
 		{
 			type: "list",
@@ -129,12 +143,11 @@ function addProduct(){
 			name: "dept"
 		}
 		]).then(function(newItem){
-			// console.log("woot");
-		connection.query(`INSERT INTO products(product_name, price, stock_quantity, department) VALUES ("${newItem.name}", ${newItem.price}, ${newItem.qty}, "${newItem.dept}")`, function(error, results){
+		connection.query(`INSERT INTO products(product_name, price, stock_quantity, department_id) VALUES ("${newItem.name}", ${newItem.price}, ${newItem.qty}, ${newItem.dept})`, function(error, results){
 			if(error){
 				console.log(error);
 			}
-			console.log(results);
+			console.log("Item has been added to the database.");
 		})
 	});
 };
